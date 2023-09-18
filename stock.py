@@ -3,6 +3,7 @@ stock.py
 '''
 
 import csv
+from typing import Any
 from validator import String, PositiveInteger, PositiveFloat
 import typedproperty
 
@@ -12,7 +13,7 @@ class Stock:
     '''
     _types = (str, int , float)
 
-    name   = typedproperty.String()
+    name   = String()
     shares = PositiveInteger()
     price  = PositiveFloat()
 
@@ -38,7 +39,7 @@ class Stock:
         if not isinstance(value, self._types[1]):
             raise TypeError
         if value < 0:
-            raise TypeError
+            raise ValueError
         self._shares = value
 
     @property
@@ -50,7 +51,7 @@ class Stock:
         if not isinstance(value, self._types[2]):
             raise TypeError
         if value < 0:
-            raise TypeError
+            raise ValueError
         self._price = value
 
     @property
@@ -67,6 +68,12 @@ class Stock:
         if shares > self.shares:
             raise ValueError("Cannot sell more shares than owned.")
         self.shares -= shares
+
+
+    def __setattr__(self, name, value):
+        if name not in { 'name', 'shares', '_shares', 'price', '_price' }:
+            raise AttributeError('No attribute %s' % name)
+        super().__setattr__(name, value)
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.name!r}, {self.shares!r}, {self.price!r})"
