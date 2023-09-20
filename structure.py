@@ -1,14 +1,17 @@
+import sys
+
 class StructureException(Exception):
     pass
 
 class Structure():
     _fields = ()
 
-    def __init__(self, *args):
-        if (len(self.__class__._fields) != len(args)):
-            raise AttributeError(f'Number of arguments must be {len(self.__class__._fields)}')
-        for field, argument in zip(self.__class__._fields, args):
-            self.__dict__[field] = argument
+    @staticmethod
+    def _init():
+        locs = sys._getframe(1).f_locals
+        self = locs.pop('self')
+        for name, val in locs.items():
+            setattr(self, name, val)
 
     def __repr__(self) -> str:
         fields = ','.join(field.__repr__() for field in self.__dict__.values())
