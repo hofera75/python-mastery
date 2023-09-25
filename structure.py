@@ -7,17 +7,16 @@ class StructureException(Exception):
 class Structure():
     _fields = ()
 
-    @staticmethod
-    def _init():
-        locs = sys._getframe(1).f_locals
-        self = locs.pop('self')
-        for name, val in locs.items():
-            setattr(self, name, val)
 
     @classmethod
-    def set_fields(cls):
-        sig = inspect.signature(cls)
-        cls._fields = tuple(sig.parameters)
+    def create_init(cls):
+        argstr = ','.join(cls._fields)
+        code = f'def __init__(self, {argstr}):\n'
+        for name in cls._fields:
+            code += f'    self.{name} = {name}\n'
+        locs = { }
+        exec(code, locs)
+        cls.__init__ = locs['__init__']
 
     def __repr__(self) -> str:
         fields = ','.join(field.__repr__() for field in self.__dict__.values())
