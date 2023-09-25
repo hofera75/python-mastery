@@ -1,4 +1,5 @@
 import sys
+import inspect
 
 class StructureException(Exception):
     pass
@@ -12,6 +13,11 @@ class Structure():
         self = locs.pop('self')
         for name, val in locs.items():
             setattr(self, name, val)
+
+    @classmethod
+    def set_fields(cls):
+        sig = inspect.signature(cls)
+        cls._fields = tuple(sig.parameters)
 
     def __repr__(self) -> str:
         fields = ','.join(field.__repr__() for field in self.__dict__.values())
