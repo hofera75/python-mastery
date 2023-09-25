@@ -1,3 +1,5 @@
+import inspect
+
 class Validator:
     def __init__(self, name=None):
         self.name = name
@@ -51,3 +53,16 @@ class PositiveFloat(Float, Positive):
 
 class NonEmptyString(String, NonEmpty):
     pass
+
+class ValidatedFunction:
+    def __init__(self, func):
+        self.func = func
+
+    def __call__(self, *args, **kwargs):
+        print('Calling', self.func)
+        sig = inspect.signature(self.func)
+        bound = sig.bind(*args, **kwargs)
+        for key, value in bound.arguments.items():
+            self.func.__annotations__[key](value)
+        result = self.func(*args, **kwargs)
+        return result

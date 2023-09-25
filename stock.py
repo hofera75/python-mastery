@@ -3,10 +3,10 @@ stock.py
 '''
 
 from structure import Structure
+from validator import ValidatedFunction
 
 class Stock(Structure):
-    def __init__(self, name, shares, price):
-        self._init()
+    _fields = ('name', 'shares', 'price')
 
     @property
     def cost(self):
@@ -14,5 +14,6 @@ class Stock(Structure):
 
     def sell(self, nshares):
         self.shares -= nshares
+    sell = ValidatedFunction(sell)
 
 Stock.create_init()
