@@ -24,14 +24,13 @@ class Typed(Validator):
             raise TypeError(f'Expected {cls.expected_type}')
         return super().check(value)
 
-class Integer(Typed):
-    expected_type = int
+_typed_classes = [
+    ('Integer', int),
+    ('Float', float),
+    ('String', str) ]
 
-class Float(Typed):
-    expected_type = float
-
-class String(Typed):
-    expected_type = str
+globals().update((name, type(name, (Typed,), {'expected_type':ty}))
+                 for name, ty in _typed_classes)
 
 class Positive(Validator):
     @classmethod

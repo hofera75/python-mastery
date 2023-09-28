@@ -58,3 +58,7 @@ class Structure():
         rowdata = [ func(val) for func, val in zip(cls._types, row) ]
         return cls(*rowdata)
 
+
+def typed_structure(clsname, **validators):
+    cls = type(clsname, (Structure,), validators)
+    return cls
