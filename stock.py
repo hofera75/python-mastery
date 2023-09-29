@@ -3,7 +3,6 @@ stock.py
 '''
 
 from structure import Structure, validate_attributes
-from validate import String, PositiveInteger, PositiveFloat
 
 class Stock(Structure):
     name = String()
