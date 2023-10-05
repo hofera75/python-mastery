@@ -1,6 +1,7 @@
 from socket import *
 from select import select
 from collections import deque
+from types import coroutine
 
 tasks = deque()
 recv_wait = {}   #  sock -> task
@@ -26,25 +27,45 @@ def run():
         except StopIteration:
             print('Task done')
 
-def tcp_server(address, handler):
-    sock = socket(AF_INET, SOCK_STREAM)
+class GenSocket:
+    def __init__(self, sock):
+        self.sock = sock
+
+    @coroutine
+    def accept(self):
+        yield 'recv', self.sock
+        client, addr = self.sock.accept()
+        return GenSocket(client), addr
+
+    @coroutine
+    def recv(self, maxsize):
+        yield 'recv', self.sock
+        return self.sock.recv(maxsize)
+
+    @coroutine
+    def send(self, data):
+        yield 'send', self.sock
+        return self.sock.send(data)
+
+    def __getattr__(self, name):
+        return getattr(self.sock, name)
+
+async def tcp_server(address, handler):
+    sock = GenSocket(socket(AF_INET, SOCK_STREAM))
     sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
     sock.bind(address)
     sock.listen(5)
     while True:
-        yield 'recv', sock
-        client, addr = sock.accept()
+        client, addr = await sock.accept()
         tasks.append(handler(client, addr))
         
-def echo_handler(client, address):
+async def echo_handler(client, address):
     print('Connection from', address)
     while True:
-        yield 'recv', client
-        data = client.recv(1000)
+        data = await client.recv(1000)
         if not data:
             break
-        yield 'send', client
-        client.send(b'GOT:' + data)
+        await client.send(b'GOT:', data)
     print('Connection closed')
 
 if __name__ == '__main__':
