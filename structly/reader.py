@@ -5,6 +5,8 @@ import io
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
+__all__ = ['read_csv_as_dicts', 'read_csv_as_instances']
+
 def read_csv_as_dicts(filename: str, types: []) -> []:
     '''
     Read CSV data into a list of dictionaries with optional type conversion

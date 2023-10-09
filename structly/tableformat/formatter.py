@@ -4,6 +4,8 @@ from abc import ABC, abstractclassmethod
 import structly.reader
 from stock import Stock
 
+
+
 class TableFormatter(ABC):
     @abstractclassmethod
     def headings(self, headers):
@@ -13,30 +15,6 @@ class TableFormatter(ABC):
     def row(self, rowdata):
         raise NotImplementedError()
 
-class TextTableFormatter(TableFormatter):
-    def headings(self, headers):
-        print(' '.join('%10s' % h for h in headers))
-        print(('-'*10 + ' ')*len(headers))
-
-    def row(self, rowdata):
-        print(' '.join('%10s' % d for d in rowdata))
-
-class CSVTableFormatter(TableFormatter):
-    def headings(self, headers):
-        print(','.join('%s' % h for h in headers))
-    def row(self, rowdata):
-        print(','.join('%s' % h for h in rowdata))
-
-class HTMLTableFormatter(TableFormatter):
-    def headings(self, headers):
-        print('<tr>', end='')
-        print(' '.join('<th>%s</th>' % h for h in headers), end='')
-        print('</tr>')
-
-    def row(self, rowdata):
-        print('<tr>', end='')
-        print(' '.join('<td>%s</td>' % h for h in rowdata), end='')
-        print('</tr>')
 
 class redirect_stdout:
         def __init__(self, out_file):
@@ -57,6 +35,8 @@ class ColumnFormatMixin:
 class UpperHeadersMixin:
     def headings(self, headers):
         super().headings([h.upper() for h in headers])
+
+from .formats import TextTableFormatter, CSVTableFormatter, HTMLTableFormatter
 
 def create_formatter(format, column_formats=None, upper_header=False):
     formatter = {
