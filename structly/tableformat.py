@@ -1,7 +1,7 @@
 import sys
 from abc import ABC, abstractclassmethod
 
-import reader
+import structly.reader
 from stock import Stock
 
 class TableFormatter(ABC):

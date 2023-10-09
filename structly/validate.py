@@ -1,6 +1,9 @@
 from inspect import signature
 from functools import wraps
 
+from typedproperty import String, Integer, Float
+
+
 
 class Validator:
     validators = { }
