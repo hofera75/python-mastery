@@ -1,4 +1,4 @@
-from logcall import logged
+from metaprogramming.logcall import logged
 
 class Spam:
     @logged

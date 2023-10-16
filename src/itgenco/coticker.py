@@ -1,5 +1,6 @@
 # coticker.py
-from structure import Structure
+from structly.structure import Structure
+from structly.validate import String, Float, Integer
 
 class Ticker(Structure):
     name = String()
@@ -12,8 +13,8 @@ class Ticker(Structure):
     low = Float()
     volume = Integer()
 
-from cofollow import consumer, follow, receive
-from tableformat import create_formatter
+from itgenco.cofollow import consumer, follow, receive
+from structly.tableformat import create_formatter
 import csv
 
 # This one is tricky. See solution for notes about it
@@ -51,4 +52,5 @@ def ticker(fmt, fields):
         formatter.row(row)
 
 if __name__ == '__main__':
+    # Not working 
     follow('Data/stocklog.csv',to_csv(create_ticker(negchange(ticker('text',['name','price','change'])))))

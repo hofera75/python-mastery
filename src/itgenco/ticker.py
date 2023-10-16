@@ -1,4 +1,5 @@
-from structure import Structure
+from structly.structure import Structure
+from structly.validate import String, Float, Integer
 
 class Ticker(Structure):
     name = String()
@@ -12,9 +13,9 @@ class Ticker(Structure):
     volume = Integer()
 
 if __name__ == '__main__':
-    from follow import follow
+    from itgenco.follow import follow
     import csv
-    from tableformat import create_formatter, print_table
+    from structly.tableformat import create_formatter, print_table
 
     formatter = create_formatter('text')
 

@@ -1,6 +1,6 @@
 from functools import wraps
 
-def enforce(* *args)
+def enforce(**args):
     def enf(func):
         @wraps
         def wrapper(*args, **kwargs):

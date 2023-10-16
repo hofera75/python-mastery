@@ -1,7 +1,8 @@
 # sample.py
-from validate import Integer, validated
-from logcall import logformat
-from logcall import logged
+from structly.validate import Integer, validated
+from metaprogramming.logcall import logformat
+from metaprogramming.logcall import logged
+from metaprogramming.enforcer import enforce
 
 
 @logged

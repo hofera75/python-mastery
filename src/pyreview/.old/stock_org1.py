@@ -3,21 +3,17 @@ stock.py
 '''
 
 import csv
-from typing import Any
-from validator import String, PositiveInteger, PositiveFloat
-import typedproperty
+
+import structly.validate
 
 class Stock:
     '''
     Stock
     '''
+    __slots__ = ['name', '_shares', '_price']
     _types = (str, int , float)
 
-    name   = String()
-    shares = PositiveInteger()
-    price  = PositiveFloat()
-
-    def __init__(self,name,shares,price):
+    def __init__(self, name, shares, price):
         self.name = name
         self.shares = shares
         self.price = price
@@ -36,10 +32,7 @@ class Stock:
 
     @shares.setter
     def shares(self, value):
-        if not isinstance(value, self._types[1]):
-            raise TypeError
-        if value < 0:
-            raise ValueError
+        structly.validate.PositiveInteger.check(value)
         self._shares = value
 
     @property
@@ -48,10 +41,7 @@ class Stock:
 
     @price.setter
     def price(self, value):
-        if not isinstance(value, self._types[2]):
-            raise TypeError
-        if value < 0:
-            raise ValueError
+        structly.validate.PositiveFloat.check(value)
         self._price = value
 
     @property
@@ -68,12 +58,6 @@ class Stock:
         if shares > self.shares:
             raise ValueError("Cannot sell more shares than owned.")
         self.shares -= shares
-
-
-    def __setattr__(self, name, value):
-        if name not in { 'name', 'shares', '_shares', 'price', '_price' }:
-            raise AttributeError('No attribute %s' % name)
-        super().__setattr__(name, value)
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.name!r}, {self.shares!r}, {self.price!r})"

@@ -1,5 +1,5 @@
 import unittest
-from stock import Stock
+from pyreview.stock import Stock
 
 class TestStock(unittest.TestCase):
     def test_create(self):

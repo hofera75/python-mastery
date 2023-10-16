@@ -3,7 +3,7 @@ queryreadrides.py
 """
 from collections import Counter
 from collections import defaultdict
-import readrides
+import datahandling.readrides as readrides
 
 rows = readrides.read_rides_as_dict('Data/ctabus.csv')
 
